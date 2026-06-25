@@ -47,17 +47,19 @@ timdimm/poster/                 # git-initialized (main branch); remote added la
 
 ## Header & branding
 
-Title-led header (no software wordmark exists for this project):
+Centered-title header with logos flanking on each side (no software wordmark
+exists for this project):
 
-- Left: full title, a short tagline, and the author/affiliation block — content
-  taken verbatim from `abstract.txt`.
+- Center: full title, a short tagline, and the author/affiliation block, all
+  center-aligned — content taken verbatim from `abstract.txt`.
   - Title: *Upgraded seeing monitor for the South African Astronomical Observatory*
   - Authors: Timothy E. Pickering (Univ. of Arizona/MMTO), Lisa A. Crause
     (SAAO/SALT), Encarni Romero Colmenero (SAAO/SALT), Rudi Kuhn (SAAO/SALT),
     Nico van der Merwe (SALT)
-- Right: institution logos in two rows (matching pypeit's `logo-row` pattern):
-  - Row 1 (host): **NRF/SAAO**, **SALT**
-  - Row 2 (author affiliations): **MMTO**, **University of Arizona**
+- Left side: host-institution logos — **NRF/SAAO**, **SALT**.
+- Right side: author-affiliation logos — **MMTO**, **University of Arizona**.
+- Three-zone header layout: `[left logos] [centered title block] [right logos]`,
+  with logos vertically centered against the title block.
 - Gradient rule under the header recolored to a blue ramp (from the new palette).
 
 ## Palette
@@ -123,8 +125,7 @@ outliers like 159.67 and 40.23).
 ## Footer
 
 SPIE logo (reused from pypeit) centered, flanked by acknowledgments
-(NRF/SAAO, SALT, MMTO / Univ. of Arizona) and a slot for the SPIE paper number
-(TODO until assigned).
+(NRF/SAAO, SALT, MMTO / Univ. of Arizona) and the SPIE paper number **14151-100**.
 
 ## Assets — sourcing
 
@@ -144,7 +145,6 @@ SPIE logo (reused from pypeit) centered, flanked by acknowledgments
 
 - Body text for New Hardware and New Software (drafted from abstract; gaps marked).
 - **All Ant Infestation body text (placeholder).**
-- SPIE paper number (footer).
 - Software repository URL / QR code.
 
 ## Risks
