@@ -72,7 +72,8 @@ def fig_compare_hist(dimm, salt):
             color=RED, label=f"SALT guider (n={len(salt)})")
     ax.set_xlabel("seeing / image FWHM (arcsec)")
     ax.set_ylabel("normalized frequency")
-    ax.set_title("timDIMM vs SALT guider (Jan–Apr 2026)")
+    ax.set_title("DIMM vs SALT guider (Jan–Apr 2026)")
+    ax.set_xlim(0, 5)
     ax.legend(frameon=False)
     ax.grid(axis="y", color=HAIR)
     fig.tight_layout()
@@ -104,14 +105,19 @@ def fig_compare_nights(dimm, salt):
                 color=BLUE, label="timDIMM")
         ax.plot(sn["time"].dt.tz_convert(None), sn["fwhm"], ".", ms=4,
                 color=RED, alpha=0.6, label="SALT guider")
-        ax.set_title(str(night)); ax.set_ylim(0, SEEING_MAX)
+        ax.set_title(str(night)); ax.set_ylim(0, 5)
+        # fixed evening-to-morning window, 18:00–04:30 UT
+        ax.set_xlim(pd.Timestamp(night) + pd.Timedelta(hours=18),
+                    pd.Timestamp(night) + pd.Timedelta(days=1, hours=4.5))
         ax.grid(color=HAIR)
         ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
         ax.xaxis.set_major_formatter(mdates.DateFormatter("%H:%M"))
     axes[0, 0].legend(frameon=False, markerscale=2)
     for ax in axes[:, 0]:
         ax.set_ylabel("arcsec")
-    fig.suptitle("Four representative nights: timDIMM seeing vs SALT guider FWHM",
+    for ax in axes[1, :]:
+        ax.set_xlabel("time (UT)")
+    fig.suptitle("Four representative nights: DIMM seeing vs SALT guider FWHM",
                  fontsize=24)
     fig.tight_layout()
     out = os.path.join(FIG, "seeing_compare_nights.png")
@@ -131,7 +137,8 @@ def fig_histogram(df):
         ax.axvline(x, color=RED if ls == "-" else NAVY, ls=ls, lw=2.2, label=lab)
     ax.set_xlabel("DIMM seeing (arcsec)")
     ax.set_ylabel("number of measurements")
-    ax.set_title("timDIMM seeing distribution (2024–2026)")
+    ax.set_title("DIMM seeing distribution (2024–2026)")
+    ax.set_xlim(0, 5)
     ax.legend(frameon=False)
     ax.grid(axis="y", color=HAIR)
     fig.tight_layout()
@@ -147,16 +154,15 @@ def fig_violins_monthly(df):
     months = sorted(df["month"].unique())
     data = [df.loc[df["month"] == m, "seeing"].values for m in months]
     fig, ax = plt.subplots(figsize=(13.5, 6.2))
-    parts = ax.violinplot(data, showmedians=True, widths=0.85)
+    parts = ax.violinplot(data, showmedians=True, showextrema=False, widths=0.85)
     for b in parts["bodies"]:
         b.set_facecolor(CORN); b.set_edgecolor(BLUE); b.set_alpha(0.75)
-    for key in ("cbars", "cmins", "cmaxes", "cmedians"):
-        parts[key].set_color(NAVY); parts[key].set_linewidth(1.6)
+    parts["cmedians"].set_color(NAVY); parts["cmedians"].set_linewidth(1.6)
     ax.set_xticks(range(1, len(months) + 1))
     ax.set_xticklabels([str(m) for m in months], rotation=60, ha="right")
     ax.set_ylabel("DIMM seeing (arcsec)")
     ax.set_title("Monthly seeing distributions")
-    ax.set_ylim(0, SEEING_MAX)
+    ax.set_ylim(0, 5)
     ax.grid(axis="y", color=HAIR)
     fig.tight_layout()
     out = os.path.join(FIG, "seeing_violins_monthly.png")
