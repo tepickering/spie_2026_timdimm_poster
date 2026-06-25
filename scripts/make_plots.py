@@ -46,6 +46,79 @@ def load_seeing():
     return df
 
 
+LABVIEW_EPOCH = pd.Timestamp("1904-01-01", tz="UTC")
+
+
+def load_salt():
+    """Return cleaned SALT guider data [time(datetime, UTC), fwhm(arcsec)]."""
+    df = pd.read_csv(os.path.join(DATA, "SALT_guider_data.csv"),
+                     usecols=["timestamp", "fwhm"])
+    n_raw = len(df)
+    df["time"] = LABVIEW_EPOCH + pd.to_timedelta(df["timestamp"], unit="s")
+    df = df[(df["fwhm"] > SEEING_MIN) & (df["fwhm"] < SEEING_MAX)].copy()
+    lo, hi = df["time"].min(), df["time"].max()
+    print(f"SALT: {n_raw} raw -> {len(df)} clean | span {lo} .. {hi}")
+    assert pd.Timestamp("2024-01-01", tz="UTC") < lo < pd.Timestamp("2027-01-01", tz="UTC"), \
+        "SALT timestamp conversion outside expected window — check LabVIEW epoch"
+    return df
+
+
+def fig_compare_hist(dimm, salt):
+    bins = np.arange(SEEING_MIN, SEEING_MAX + 0.1, 0.1)
+    fig, ax = plt.subplots(figsize=(9.5, 6.2))
+    ax.hist(dimm["seeing"], bins=bins, density=True, color=BLUE, alpha=0.55,
+            label=f"timDIMM (n={len(dimm)})")
+    ax.hist(salt["fwhm"], bins=bins, density=True, histtype="step", lw=2.6,
+            color=RED, label=f"SALT guider (n={len(salt)})")
+    ax.set_xlabel("seeing / image FWHM (arcsec)")
+    ax.set_ylabel("normalized frequency")
+    ax.set_title("timDIMM vs SALT guider (Jan–Apr 2026)")
+    ax.legend(frameon=False)
+    ax.grid(axis="y", color=HAIR)
+    fig.tight_layout()
+    out = os.path.join(FIG, "seeing_compare_hist.png")
+    fig.savefig(out, dpi=200); plt.close(fig)
+    print("wrote", out)
+
+
+def _nightly(df):
+    """Add a 'night' column (local night = UTC date shifted back 12 h)."""
+    df = df.copy()
+    df["night"] = (df["time"] - pd.Timedelta(hours=12)).dt.date
+    return df
+
+
+def fig_compare_nights(dimm, salt):
+    import matplotlib.dates as mdates
+    d = _nightly(dimm); s = _nightly(salt)
+    # nights where BOTH instruments are well sampled
+    cd = d.groupby("night").size(); cs = s.groupby("night").size()
+    common = sorted(set(cd[cd > 80].index) & set(cs[cs > 80].index),
+                    key=lambda n: min(cd[n], cs[n]), reverse=True)
+    nights = sorted(common[:4])
+    assert len(nights) == 4, f"need 4 well-sampled common nights, found {len(common)}"
+    fig, axes = plt.subplots(2, 2, figsize=(13.5, 9.0), sharey=True)
+    for ax, night in zip(axes.ravel(), nights):
+        dn = d[d["night"] == night]; sn = s[s["night"] == night]
+        ax.plot(dn["time"].dt.tz_convert(None), dn["seeing"], ".", ms=5,
+                color=BLUE, label="timDIMM")
+        ax.plot(sn["time"].dt.tz_convert(None), sn["fwhm"], ".", ms=4,
+                color=RED, alpha=0.6, label="SALT guider")
+        ax.set_title(str(night)); ax.set_ylim(0, SEEING_MAX)
+        ax.grid(color=HAIR)
+        ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+        ax.xaxis.set_major_formatter(mdates.DateFormatter("%H:%M"))
+    axes[0, 0].legend(frameon=False, markerscale=2)
+    for ax in axes[:, 0]:
+        ax.set_ylabel("arcsec")
+    fig.suptitle("Four representative nights: timDIMM seeing vs SALT guider FWHM",
+                 fontsize=24)
+    fig.tight_layout()
+    out = os.path.join(FIG, "seeing_compare_nights.png")
+    fig.savefig(out, dpi=200); plt.close(fig)
+    print("wrote", out, "| nights:", nights)
+
+
 def fig_histogram(df):
     s = df["seeing"]
     med, q1, q3 = s.median(), s.quantile(0.25), s.quantile(0.75)
@@ -92,9 +165,12 @@ def fig_violins_monthly(df):
 
 
 def main():
-    df = load_seeing()
-    fig_histogram(df)
-    fig_violins_monthly(df)
+    dimm = load_seeing()
+    fig_histogram(dimm)
+    fig_violins_monthly(dimm)
+    salt = load_salt()
+    fig_compare_hist(dimm, salt)
+    fig_compare_nights(dimm, salt)
 
 
 if __name__ == "__main__":
