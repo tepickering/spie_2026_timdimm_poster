@@ -67,7 +67,7 @@ def fig_compare_hist(dimm, salt):
     bins = np.arange(SEEING_MIN, SEEING_MAX + 0.1, 0.1)
     fig, ax = plt.subplots(figsize=(9.5, 6.2))
     ax.hist(dimm["seeing"], bins=bins, density=True, color=BLUE, alpha=0.55,
-            label=f"timDIMM (n={len(dimm)})")
+            label=f"DIMM (n={len(dimm)})")
     ax.hist(salt["fwhm"], bins=bins, density=True, histtype="step", lw=2.6,
             color=RED, label=f"SALT guider (n={len(salt)})")
     ax.set_xlabel("seeing / image FWHM (arcsec)")
@@ -102,7 +102,7 @@ def fig_compare_nights(dimm, salt):
     for ax, night in zip(axes.ravel(), nights):
         dn = d[d["night"] == night]; sn = s[s["night"] == night]
         ax.plot(dn["time"].dt.tz_convert(None), dn["seeing"], ".", ms=5,
-                color=BLUE, label="timDIMM")
+                color=BLUE, label="DIMM")
         ax.plot(sn["time"].dt.tz_convert(None), sn["fwhm"], ".", ms=4,
                 color=RED, alpha=0.6, label="SALT guider")
         ax.set_title(str(night)); ax.set_ylim(0, 5)
