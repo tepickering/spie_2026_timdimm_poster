@@ -34,10 +34,128 @@
     </header>
     <div id="spectrum-rule"></div>
     <main id="columns">
-      <section class="col"><section class="section"><h2>Placeholder</h2>
-        <p>Scaffold render check.</p></section></section>
-      <section class="col"></section>
-      <section class="col"></section>
+      <section class="col" id="col1">
+        <section class="section">
+          <h2>Abstract</h2>
+          <!-- verbatim from abstract.txt; note "the was developed" typo retained -->
+          <p>Automated measurement of atmospheric seeing began at the South African
+          Astronomical Observatory (SAAO) in March 2010. The original equipment
+          consisted of a MASS-DIMM mated to a 25&nbsp;cm Meade LX200 with the DIMM
+          channel feeding a high-speed (200+&nbsp;fps) IEEE1394 camera. That hardware
+          eventually succumbed to the ravages of time. The interfaces to the MASS and
+          DIMM camera became obsolete and difficult to support. The key failure,
+          though, was that the mount could no longer point or track well enough to be
+          useful anymore.</p>
+          <p>In 2024 the system was upgraded significantly and returned to routine
+          operation. The DIMM camera and mount were replaced with newer, more
+          performant options and the MASS-DIMM was replaced with a simple DIMM mask.
+          We present results from the first two years of renewed operation, compared
+          to seeing measurements from other sources at the SAAO site, and describe the
+          updated software developed for this system.</p>
+        </section>
+        <section class="section">
+          <h2>New Hardware</h2>
+          <p>The original 2010 system paired a <b>MASS-DIMM</b> with a 25&nbsp;cm Meade
+          LX200; the DIMM channel fed a 200+&nbsp;fps IEEE1394 camera. Two failures
+          ended its life: the MASS and DIMM camera interfaces became obsolete and
+          unsupportable and — decisively — the mount could no longer point or track
+          reliably.</p>
+          <p>The 2024 rebuild keeps the DIMM technique but modernizes the system:</p>
+          <ul>
+            <li><b>Mount</b> — <span class="todo">[TODO: new mount make/model]</span>
+            replacing the failed LX200.</li>
+            <li><b>DIMM camera</b> — <span class="todo">[TODO: model, frame rate,
+            interface]</span> replacing the IEEE1394 camera.</li>
+            <li><b>DIMM mask</b> — the MASS-DIMM was retired for a <b>simple
+            two-aperture DIMM mask</b>, simplifying the optics and upkeep.</li>
+            <li><span class="todo">[TODO: OTA reused or replaced? aperture?]</span></li>
+          </ul>
+          <figure>
+            <img src="assets/figures/timdimm_closeup.jpeg" alt="Rebuilt timDIMM instrument">
+            <figcaption>The rebuilt timDIMM.
+            <span class="todo">[TODO: name the mount &amp; camera]</span></figcaption>
+          </figure>
+          <div class="photo-pair">
+            <figure>
+              <img src="assets/figures/timdimm_night.jpeg" alt="timDIMM at night">
+              <figcaption>In routine night operation.</figcaption>
+            </figure>
+            <figure>
+              <img src="assets/figures/timdimm_oldmount.jpg" alt="Previous LX200 setup">
+              <figcaption>The previous LX200-based setup.</figcaption>
+            </figure>
+          </div>
+        </section>
+      </section>
+
+      <section class="col" id="col2">
+        <section class="section">
+          <h2>New Software</h2>
+          <p>The upgrade included a substantial rewrite of the acquisition and
+          analysis software <span class="todo">[TODO: confirm stack — Python]</span>.
+          Key elements:</p>
+          <ul>
+            <li><b>Acquisition</b> — camera control and frame capture
+            <span class="todo">[TODO: driver/library]</span>.</li>
+            <li><b>DIMM reduction</b> — differential image motion &rarr; seeing
+            <span class="todo">[TODO: cadence / real-time?]</span>.</li>
+            <li><b>Telescope control</b> — pointing, tracking, target selection on
+            the new mount <span class="todo">[TODO: details]</span>.</li>
+            <li><b>Logging &amp; dissemination</b> — seeing values stored and
+            <span class="todo">[TODO: how published to operations]</span>.</li>
+          </ul>
+          <!-- TODO: optional software-repo QR:
+          <figure class="repo-qr">
+            <img src="assets/figures/qr_repo.png" alt="Software repository">
+            <figcaption><b>Code:</b> [TODO: repo URL]</figcaption>
+          </figure> -->
+        </section>
+        <section class="section">
+          <h2>Ant Infestation</h2>
+          <!-- TODO: author to write the ant-infestation narrative -->
+          <p class="todo">[TODO: Ant infestation story — to be written by the author.]</p>
+          <div class="photo-pair">
+            <figure>
+              <img src="assets/figures/ants_nuc.jpeg" alt="Ants inside the control computer">
+              <figcaption class="todo">[TODO: caption — ants in the NUC]</figcaption>
+            </figure>
+            <figure>
+              <img src="assets/figures/ants_motherboard.jpeg" alt="Ants on the motherboard">
+              <figcaption class="todo">[TODO: caption — ants on the motherboard]</figcaption>
+            </figure>
+          </div>
+        </section>
+      </section>
+
+      <section class="col" id="col3">
+        <section class="section">
+          <h2>Results &amp; Comparisons</h2>
+          <p>Two years of renewed operation (Apr&nbsp;2024&nbsp;&ndash;&nbsp;Jun&nbsp;2026)
+          give a median DIMM seeing of <b>~1.3&#8243;</b>
+          <span class="todo">[verify against histogram callout]</span>.</p>
+          <figure>
+            <img src="assets/figures/seeing_histogram.png" alt="timDIMM seeing distribution">
+            <figcaption>Global timDIMM seeing distribution; dashed lines mark the
+            median and interquartile range.</figcaption>
+          </figure>
+          <figure>
+            <img src="assets/figures/seeing_violins_monthly.png" alt="Monthly seeing violins">
+            <figcaption>Monthly seeing distributions across the campaign, showing
+            seasonal variation.</figcaption>
+          </figure>
+          <h3 class="subhead">Comparison with the SALT guider</h3>
+          <figure>
+            <img src="assets/figures/seeing_compare_hist.png" alt="timDIMM vs SALT histograms">
+            <figcaption>Normalized distributions of timDIMM DIMM seeing and SALT
+            guider image FWHM (both arcsec) over the Jan&ndash;Apr&nbsp;2026 overlap.</figcaption>
+          </figure>
+          <figure>
+            <img src="assets/figures/seeing_compare_nights.png" alt="Four representative nights">
+            <figcaption>Four representative nights: timDIMM seeing and SALT guider
+            FWHM vs time. <span class="todo">[TODO: agreement/offset commentary]</span></figcaption>
+          </figure>
+        </section>
+      </section>
     </main>
     <footer id="footer">
       <div class="foot-grid">
