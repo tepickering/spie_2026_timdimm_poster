@@ -92,9 +92,12 @@ structural change.
 
 ## Figures — `make_plots.py`
 
-Built with matplotlib using the project's conda env
-(`/Users/tim/conda/envs/...`), styled to the poster palette, saved as PNG into
-`assets/figures/`.
+Built with matplotlib using the **`timdimm` conda env**
+(`/Users/tim/conda/envs/timdimm/bin/python`; Python 3.12, matplotlib 3.11,
+pandas 3.0, numpy 2.5), styled to the poster palette, saved as PNG into
+`assets/figures/`. **All Python work in this project uses the `timdimm` conda
+env** (including `make check`'s pypdf check and any asset-prep scripts —
+override `make`'s `PYTHON` var to point at it).
 
 ### timDIMM seeing (`seeing.csv` — columns: time, target, seeing, airmass, azimuth, exptime)
 
