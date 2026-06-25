@@ -11,7 +11,8 @@
 PYTHON ?= /Users/tim/conda/envs/timdimm/bin/python
 SIZE   ?= 1600
 
-SOURCES := index.html styles.css palette.css
+ASSETS  := $(wildcard assets/figures/*) $(wildcard assets/logos/*)
+SOURCES := index.html styles.css palette.css $(ASSETS)
 
 .PHONY: all poster render check preview plots assets open clean
 
