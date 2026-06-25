@@ -1,5 +1,13 @@
 :root{
-  --spec-violet:#122F57; --spec-blue:#1E5A9C; --spec-green:#2E6DAE;
-  --spec-yellow:#4A8FCB; --spec-orange:#79AED8; --spec-red:#C8362E;
-  --ink:#16202B; --bg:#FFFFFF; --bg-alt:#F4F7FA; --muted:#54606E; --hairline:#DEE5EC;
+  --spec-violet:#122F57;   /* deep navy — gradient start */
+  --spec-blue:  #1E5A9C;   /* primary blue — section rules, step markers */
+  --spec-green: #2E6DAE;   /* SALT hexagon cornflower — card/accent */
+  --spec-yellow:#4A8FCB;   /* mid blue */
+  --spec-orange:#79AED8;   /* light blue */
+  --spec-red:   #C8362E;   /* NRF/SALT red — sparing highlight */
+  --ink:#16202B;
+  --bg:#FFFFFF;
+  --bg-alt:#F4F7FA;
+  --muted:#54606E;
+  --hairline:#DEE5EC;
 }
