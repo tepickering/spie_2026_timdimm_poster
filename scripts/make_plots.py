@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, ".."))          # poster repo root
-DATA = os.path.normpath(os.path.join(ROOT, ".."))          # …/timdimm
+DATA = os.path.join(ROOT, "data")                          # in-repo data files
 FIG  = os.path.join(ROOT, "assets", "figures")
 os.makedirs(FIG, exist_ok=True)
 
@@ -23,6 +23,14 @@ MUTED="#54606E"; HAIR="#DEE5EC"
 
 # physical seeing window (arcsec) — rejects non-physical spikes/zeros
 SEEING_MIN, SEEING_MAX = 0.3, 8.0
+
+# SALT guider acceptance criteria.  A genuine lock on a guide star produces a
+# stellar PSF where both the FWHM and the 50%-encircled-energy diameter (ee50)
+# land in a sane range and track each other.  When the guider drifts off the
+# star one or both blow up (or go negative) and the two measures diverge, so we
+# require both to be valid AND to agree to within SALT_AGREE.
+SALT_MIN, SALT_MAX = 0.4, 5.0
+SALT_AGREE = 1.30          # keep only max(fwhm,ee50)/min(fwhm,ee50) <= this
 
 POSTER_STYLE = {
     "font.size": 20, "axes.titlesize": 24, "axes.labelsize": 22,
@@ -50,14 +58,29 @@ LABVIEW_EPOCH = pd.Timestamp("1904-01-01", tz="UTC")
 
 
 def load_salt():
-    """Return cleaned SALT guider data [time(datetime, UTC), fwhm(arcsec)]."""
+    """Return cleaned SALT guider data [time(datetime, UTC), fwhm(arcsec)].
+
+    Keeps only samples where the guider was locked on a star: both fwhm and
+    ee50 strictly inside (SALT_MIN, SALT_MAX) and agreeing to within SALT_AGREE.
+    Divergent or invalid pairs indicate the guider was not locked on a guide
+    star and are discarded.
+    """
     df = pd.read_csv(os.path.join(DATA, "SALT_guider_data.csv"),
-                     usecols=["timestamp", "fwhm"])
+                     usecols=["timestamp", "ee50", "fwhm"])
     n_raw = len(df)
     df["time"] = LABVIEW_EPOCH + pd.to_timedelta(df["timestamp"], unit="s")
-    df = df[(df["fwhm"] > SEEING_MIN) & (df["fwhm"] < SEEING_MAX)].copy()
+    # both measures must be physically plausible …
+    valid = (df["fwhm"].between(SALT_MIN, SALT_MAX, inclusive="neither")
+             & df["ee50"].between(SALT_MIN, SALT_MAX, inclusive="neither"))
+    df = df[valid].copy()
+    n_valid = len(df)
+    # … and must agree (min is now > SALT_MIN, so the ratio is safe)
+    ratio = (np.maximum(df["fwhm"], df["ee50"])
+             / np.minimum(df["fwhm"], df["ee50"]))
+    df = df[ratio <= SALT_AGREE].copy()
     lo, hi = df["time"].min(), df["time"].max()
-    print(f"SALT: {n_raw} raw -> {len(df)} clean | span {lo} .. {hi}")
+    print(f"SALT: {n_raw} raw -> {n_valid} both-valid -> {len(df)} locked "
+          f"({len(df)/n_raw*100:.1f}%) | span {lo} .. {hi}")
     assert pd.Timestamp("2024-01-01", tz="UTC") < lo < pd.Timestamp("2027-01-01", tz="UTC"), \
         "SALT timestamp conversion outside expected window — check LabVIEW epoch"
     return df
