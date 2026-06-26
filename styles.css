@@ -29,6 +29,18 @@ body{background:var(--bg);color:var(--ink);
   align-items:start;}
 .col{display:flex;flex-direction:column;gap:30mm;}
 
+/* middle column: stretch to the row height and center its content so the
+   leftover space is split between top and bottom */
+#col2{align-self:stretch;justify-content:center;}
+
+/* third column: give stacked result figures room to breathe so a caption
+   isn't crowded against the figure beneath it */
+#col3 figure{margin-top:13mm;}
+#col3 figure:first-of-type{margin-top:0;}
+/* the SALT-comparison subhead leads its plot: extra space above to separate
+   it from the section before, minimal space below so it reads with the plot */
+#col3 .subhead + figure{margin-top:0;}
+
 /* typography */
 h1,h2,h3{font-family:"Space Grotesk",sans-serif;line-height:1.08;}
 .section{break-inside:avoid;}
@@ -110,6 +122,6 @@ li{margin-bottom:3mm;}
 /* poster-specific additions */
 .photo-pair{display:grid;grid-template-columns:1fr 1fr;gap:6mm;margin-top:6mm;}
 .photo-pair figure img{height:78mm;width:100%;object-fit:cover;}
-.subhead{font-size:30pt;font-weight:700;margin:9mm 0 4mm;
+.subhead{font-size:30pt;font-weight:700;margin:20mm 0 5mm;
   color:var(--spec-violet);}
 .todo{color:var(--spec-red);font-style:italic;}
