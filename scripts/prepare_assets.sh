@@ -20,6 +20,7 @@ cp "$PYPEIT/assets/logos/ua.png"   "$LOGO/ua.png"
 cp "$PYPEIT/assets/logos/spie.jpg" "$LOGO/spie.jpg"
 
 # --- photos ---
+cp "$ROOT/timdimm_and_monet.jpg"         "$FIG/timdimm_and_monet.jpg"
 cp "$ROOT/timdimm_closeup.jpeg"          "$FIG/timdimm_closeup.jpeg"
 cp "$ROOT/timdimm_open_daytime.jpeg"     "$FIG/timdimm_open_daytime.jpeg"
 cp "$ROOT/tim_and_nico.jpg"              "$FIG/tim_and_nico.jpg"

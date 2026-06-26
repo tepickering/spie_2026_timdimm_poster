@@ -30,8 +30,11 @@ body{background:var(--bg);color:var(--ink);
 .col{display:flex;flex-direction:column;gap:30mm;}
 
 /* middle column: stretch to the row height and center its content so the
-   leftover space is split between top and bottom */
-#col2{align-self:stretch;justify-content:center;}
+   leftover space is split between top and bottom. tighter inter-section gap
+   than the other columns to make room for the extra stacked photo. */
+#col2{align-self:stretch;justify-content:center;gap:16mm;}
+/* even spacing between the two full-width photos at the top of the stack */
+.dimm-photos > figure + figure{margin-top:8mm;}
 
 /* third column: give stacked result figures room to breathe so a caption
    isn't crowded against the figure beneath it */
