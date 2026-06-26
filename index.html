@@ -48,14 +48,14 @@
           <p>In 2024 the system was upgraded significantly and returned to routine
           operation. The DIMM camera and mount were replaced with newer, more
           performant options and the MASS-DIMM was replaced with a simple DIMM mask.
-          We present results from the first two years of renewed operation, compared
-          to seeing measurements from other sources at the SAAO site, and describe the
+          We present results from the first two years of renewed operation, compare
+          it to image quality measurements from other sources at the SAAO site, and describe the
           updated software developed for this system.</p>
         </section>
         <section class="section">
           <h2>New Hardware</h2>
           <p>
-            The 2024 rebuild keeps the DIMM technique but modernizes the system around newer and
+            The 2024 rebuild keeps the DIMM technique, but modernizes the system around newer and
             more standardized components:
           </p>
           <ul>
@@ -63,7 +63,7 @@
               <b>Mount</b> — The original Astro-Physics 900GTO german equatorial mount had become damaged
               from a number of pier strikes and had a failing control board. It was not going to be
               cost-effective to repair so it was replaced with a new
-              <b>Opteron CEM70-NUC</b>. The Opteron is fully compatible with
+              <b>iOpteron CEM70-NUC</b>. The iOpteron mount is fully compatible with
               the open-source INDI control protocol and the NUC support allows for the control computer to be
               placed directly on the mount, greatly simplifying the cabling.
             </li>
@@ -71,7 +71,7 @@
               <b>DIMM camera</b> — Sensor technology has improved significantly since the original DIMM
               camera was selected. Modern CMOS sensors have much lower read noise, higher quantum efficiency,
               and faster frame rates. Cameras have also become more standardized with USB 3.x becoming ubiquitous.
-              The new camera is a <b>ZWO ASI432MM</b>. The unique feature of this camera is its 9 micron pixel size, the
+              The new camera is a <b>ZWO ASI432MM</b>. The unique feature of this camera is its <b>9 &#181;m pixel size</b>, the
               largest available in a low-cost commodity camera. This is a much better match to the LX200's long focal
               length and a further boost in sensitivity.
             </li>
@@ -96,7 +96,7 @@
             <figure>
               <img src="assets/figures/ants_nuc.jpeg" alt="Ants inside the control computer">
               <figcaption>
-                Ants almost completely filling the control computers air intake.
+                Ants almost completely filling the control computer's air intake.
               </figcaption>
             </figure>
             <figure>
@@ -155,18 +155,21 @@
               upgrades.
             </li>
             <li>
-              <b>Kstars/Ekos</b> — Kstars works on top of INDI and manages the telescope control,
+              <b>Kstars/Ekos</b> — Kstars and Ekos are open-source applications that work on top of INDI and
+              manage the telescope control,
               data acquisition, auto-guiding, and plate-solving. The auto-guiding and plate-solving
-              use a new guide scope and camera that was added to the system. With plate-solving, the system
+              use a new guide scope and camera (ZWO ASI178MM) that was added to the system. With plate-solving, the system
               routinely achieves pointing better than 5 arcseconds. The <b>Ekos</b> module handles the
-              system's scheduling and target selection. The Ekos scheduler also defines observing
-              sequences and the scripts that run as part of each observation. Ekos also queries weather status
+              scheduling and target selection. Ekos sequence files define the target catalog, observing
+              sequences, and scripts that run as part of each observation. Ekos also queries weather status
               regularly to determine if it's safe to observe.
             </li>
             <li>
-              <b>Data acquisition and analysis</b> — The acquisition of seeing data is handled by a custom Python script.
+              <b>Data acquisition and analysis</b> — The acquisition of seeing data is handled by a custom Python script that
+              is triggered by the Ekos scheduler.
               It uses INDI to control the camera and acquire data in the form of SER video captures. A short full-frame
-              capture is done to identify the positions of the DIMM spots. Then a 400x400 ROI is centered on them and
+              capture is used to identify the positions of the DIMM spots and set the exposure time. A 400x400 ROI
+              is then centered on the spots and
               a 15-second video is captured. Depending on conditions, exposure times range from 0.5 to 2 milliseconds.
               Even with a 16-bit readout, the ASI432MM captures 400x400 video at 300 frames per second. The SER video is
               converted to a datacube for the DIMM analysis. Seeing values are logged both locally and to the
@@ -206,15 +209,15 @@
             <img src="assets/figures/seeing_compare_hist.png" alt="DIMM vs SALT guider histograms">
             <figcaption>
               Normalized distributions of DIMM seeing
-              (n&nbsp;=&nbsp;33,087) and SALT guider image FWHM (n&nbsp;=&nbsp;352,555),
-              both in arcsec, over the Jan&ndash;Apr&nbsp;2026 overlap. SALT guider data includes
+              (n&nbsp;=&nbsp;33,087) and SALT guider image FWHM (n&nbsp;=&nbsp;352,555)
+              over the Jan&ndash;Apr&nbsp;2026 overlap period. SALT guider data includes
               both RSS and HRS.
             </figcaption>
           </figure>
           <figure>
             <img src="assets/figures/seeing_compare_nights.png" alt="Four representative nights">
             <figcaption>
-              Four representative nights: DIMM seeing and SALT guider FWHM vs time.
+              Time-series comparison of DIMM seeing and SALT guider FWHM for four representative, clear nights.
             </figcaption>
           </figure>
         </section>
@@ -223,7 +226,7 @@
     <footer id="footer">
       <div class="foot-grid">
         <div>
-          <b>Acknowledgments:</b> Many, many thanks are owed to the staffs of the Southern African Large Telescope (SALT) &amp;
+          <b>Acknowledgments:</b> Our deepest gratitude is owed to the staffs of the Southern African Large Telescope (SALT) &amp;
           the South African Astronomical Observatory (SAAO) who have supported and maintained this
           system over many years. The authors also acknowledge the support of the National Research Foundation
           (NRF) of South Africa.
