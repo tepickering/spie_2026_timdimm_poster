@@ -138,7 +138,7 @@ def fig_histogram(df):
     med, q1, q3 = s.median(), s.quantile(0.25), s.quantile(0.75)
     fig, ax = plt.subplots(figsize=(9.5, 6.2))
     ax.hist(s, bins=np.arange(SEEING_MIN, SEEING_MAX + 0.1, 0.1),
-            color=BLUE, edgecolor="white", linewidth=0.3)
+            color=BLUE, alpha=0.55)
     for x, ls, lab in [(med, "-", f"median = {med:.2f}″"),
                        (q1, "--", f"Q1 = {q1:.2f}″"),
                        (q3, "--", f"Q3 = {q3:.2f}″")]:
