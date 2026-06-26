@@ -37,7 +37,6 @@
       <section class="col" id="col1">
         <section class="section">
           <h2>Abstract</h2>
-          <!-- verbatim from abstract.txt; note "the was developed" typo retained -->
           <p>Automated measurement of atmospheric seeing began at the South African
           Astronomical Observatory (SAAO) in March 2010. The original equipment
           consisted of a MASS-DIMM mated to a 25&nbsp;cm Meade LX200 with the DIMM
@@ -55,36 +54,56 @@
         </section>
         <section class="section">
           <h2>New Hardware</h2>
-          <p>The original 2010 system paired a <b>MASS-DIMM</b> with a 25&nbsp;cm Meade
-          LX200; the DIMM channel fed a 200+&nbsp;fps IEEE1394 camera. Two failures
-          ended its life: the MASS and DIMM camera interfaces became obsolete and
-          unsupportable and — decisively — the mount could no longer point or track
-          reliably.</p>
-          <p>The 2024 rebuild keeps the DIMM technique but modernizes the system:</p>
+          <p>
+            The 2024 rebuild keeps the DIMM technique but modernizes the system around newer and
+            more standardized components:
+          </p>
           <ul>
-            <li><b>Mount</b> — <span class="todo">[TODO: new mount make/model]</span>
-            replacing the failed LX200.</li>
-            <li><b>DIMM camera</b> — <span class="todo">[TODO: model, frame rate,
-            interface]</span> replacing the IEEE1394 camera.</li>
-            <li><b>DIMM mask</b> — the MASS-DIMM was retired for a <b>simple
-            two-aperture DIMM mask</b>, simplifying the optics and upkeep.</li>
-            <li><span class="todo">[TODO: OTA reused or replaced? aperture?]</span></li>
+            <li>
+              <b>Mount</b> — The original Astro-Physics 900GTO german equatorial mount had become damaged
+              from a number of pier strikes and had a failing control board. It was not going to be
+              cost-effective to repair so it was replaced with a new
+              <b>Opteron CEM70-NUC</b>. The Opteron is fully compatible with
+              the open-source INDI control protocol and the NUC support allows for the control computer to be
+              placed directly on the mount, greatly simplifying the cabling.
+            </li>
+            <li>
+              <b>DIMM camera</b> — Sensor technology has improved significantly since the original DIMM
+              camera was selected. Modern CMOS sensors have much lower read noise, higher quantum efficiency,
+              and faster frame rates. Cameras have also become more standardized with USB 3.x becoming ubiquitous.
+              The new camera is a <b>ZWO ASI432MM</b>. The unique feature of this camera is its 9 micron pixel size, the
+              largest available in a low-cost commodity camera. This is a much better match to the LX200's long focal
+              length and a further boost in sensitivity.
+            </li>
+            <li>
+              <b>DIMM mask</b> — A DIMM mask leftover from the
+              original site testing campaign at the SAAO site in Sutherland was free and available so we replaced
+              the bulky, obsolete MASS-DIMM with it. It has
+              two 5 cm apertures, one clear and one with a wedge prism. A second clear aperture has a slide cover that
+              can be opened to facilitate focusing the telescope with the mask installed. The mask allows the full
+              field of view of the new camera to be utilised which significantly reduces the burden on the system's
+              alignment and pointing performance.
+            </li>
           </ul>
           <figure>
-            <img src="assets/figures/timdimm_closeup.jpeg" alt="Rebuilt timDIMM instrument">
-            <figcaption>The rebuilt timDIMM.
-            <span class="todo">[TODO: name the mount &amp; camera]</span></figcaption>
+            <img src="assets/figures/timdimm_closeup.jpeg" alt="Rebuilt DIMM instrument">
+            <figcaption>
+              Refurbished DIMM system and its new iOpteron CEM70 mount.
+            </figcaption>
           </figure>
           <div class="photo-pair">
             <figure>
               <img src="assets/figures/timdimm_open_daytime.jpeg" alt="Open instrument in daytime, cameras on the back of the telescope">
-              <figcaption>Daytime view: the cameras are mounted on the back of the
-              telescope, under the roll-off roof.</figcaption>
+              <figcaption>
+                Daytime view showing the new DIMM and guide cameras.
+              </figcaption>
             </figure>
             <figure>
               <img src="assets/figures/tim_and_nico.jpg" alt="Tim Pickering and Nico van der Merwe at the instrument">
-              <figcaption>Co-authors T.&nbsp;Pickering and N.&nbsp;van&nbsp;der&nbsp;Merwe
-              at the rebuilt instrument.</figcaption>
+              <figcaption>
+                Co-authors T.&nbsp;Pickering and N.&nbsp;van&nbsp;der&nbsp;Merwe braving the elements to work
+                on the mount and enclosure interfaces.
+              </figcaption>
             </figure>
           </div>
         </section>
@@ -93,18 +112,36 @@
       <section class="col" id="col2">
         <section class="section">
           <h2>New Software</h2>
-          <p>The upgrade included a substantial rewrite of the acquisition and
-          analysis software <span class="todo">[TODO: confirm stack — Python]</span>.
-          Key elements:</p>
+          <p>
+            The upgrade included a complete rewrite of the acquisition and
+            analysis software.
+            <br><br>
+            <b>Key elements:</b>
+          </p>
           <ul>
-            <li><b>Acquisition</b> — camera control and frame capture
-            <span class="todo">[TODO: driver/library]</span>.</li>
-            <li><b>DIMM reduction</b> — differential image motion &rarr; seeing
-            <span class="todo">[TODO: cadence / real-time?]</span>.</li>
-            <li><b>Telescope control</b> — pointing, tracking, target selection on
-            the new mount <span class="todo">[TODO: details]</span>.</li>
-            <li><b>Logging &amp; dissemination</b> — seeing values stored and
-            <span class="todo">[TODO: how published to operations]</span>.</li>
+            <li>
+              <b>INDI</b> — All hardware is controlled via the open-source INDI protocol. This allows for
+              easy integration of the new mount and cameras and provides a standard interface for future
+              upgrades.
+            </li>
+            <li>
+              <b>Kstars/Ekos</b> — Kstars works on top of INDI and manages the telescope control,
+              data acquisition, auto-guiding, and plate-solving. The auto-guiding and plate-solving
+              use a new guide scope and camera that was added to the system. With plate-solving, the system
+              routinely achieves pointing better than 5 arcseconds. The <b>Ekos</b> module handles the
+              system's scheduling and target selection. The Ekos scheduler also defines observing
+              sequences and the scripts that run as part of each observation. Ekos also queries weather status
+              regularly to determine if it's safe to observe.
+            </li>
+            <li>
+              <b>Data acquisition and analysis</b> — The acquisition of seeing data is handled by a custom Python script.
+              It uses INDI to control the camera and acquire data in the form of SER video captures. A short full-frame
+              capture is done to identify the positions of the DIMM spots. Then a 400x400 ROI is centered on them and
+              a 15-second video is captured. Depending on conditions, exposure times range from 0.5 to 2 milliseconds.
+              Even with a 16-bit readout, the ASI432MM captures 400x400 video at 300 frames per second. The SER video is
+              converted to a datacube for the DIMM analysis. Seeing values are logged both locally and to the
+              SALT database
+            </li>
           </ul>
           <!-- TODO: optional software-repo QR:
           <figure class="repo-qr">
@@ -114,16 +151,24 @@
         </section>
         <section class="section">
           <h2>Ant Infestation</h2>
-          <!-- TODO: author to write the ant-infestation narrative -->
-          <p class="todo">[TODO: Ant infestation story — to be written by the author.]</p>
+          <p>
+            The campaign with the upgraded system was interrupted for a few months in 2025 by a
+            catastrophic ant infestation. The ants filled the control computer and destroyed
+            both it and the mount's control module.
+          </p>
           <div class="photo-pair">
             <figure>
               <img src="assets/figures/ants_nuc.jpeg" alt="Ants inside the control computer">
-              <figcaption class="todo">[TODO: caption — ants in the NUC]</figcaption>
+              <figcaption>
+                Ants almost completely filling the control computers air intake.
+              </figcaption>
             </figure>
             <figure>
               <img src="assets/figures/ants_motherboard.jpeg" alt="Ants on the motherboard">
-              <figcaption class="todo">[TODO: caption — ants on the motherboard]</figcaption>
+              <figcaption>
+                Ants covering most of the motherboard of the control computer. The acid from the ants corroded
+                the electronics on the board and destroyed it.
+              </figcaption>
             </figure>
           </div>
         </section>
@@ -132,30 +177,38 @@
       <section class="col" id="col3">
         <section class="section">
           <h2>Results &amp; Comparisons</h2>
-          <p>Two years of renewed operation (Apr&nbsp;2024&nbsp;&ndash;&nbsp;Jun&nbsp;2026)
-          give a median DIMM seeing of <b>~1.3&#8243;</b>
-          <span class="todo">[verify against histogram callout]</span>.</p>
+          <p>
+            Two years of renewed operation (Apr&nbsp;2024&nbsp;&ndash;&nbsp;Jun&nbsp;2026)
+            give a median DIMM seeing of <b>1.32&#8243;</b>. This is bang-on agreement with the
+            median seeing measured by the original system and reported in Catala et&nbsp;al.&nbsp;(2013, MNRAS, 436, 590).
+        </p>
           <figure>
             <img src="assets/figures/seeing_histogram.png" alt="timDIMM seeing distribution">
-            <figcaption>Global timDIMM seeing distribution; dashed lines mark the
+            <figcaption>Seeing distribution for the renewed operation campaign; dashed lines mark the
             median and interquartile range.</figcaption>
           </figure>
           <figure>
             <img src="assets/figures/seeing_violins_monthly.png" alt="Monthly seeing violins">
-            <figcaption>Monthly seeing distributions across the campaign, showing
-            seasonal variation.</figcaption>
+            <figcaption>
+              Monthly seeing distributions across the campaign, showing
+              some seasonal variation. The gap between April and July 2025 was due to the ant infestation.
+            </figcaption>
           </figure>
           <h3 class="subhead">Comparison with the SALT guider</h3>
           <figure>
             <img src="assets/figures/seeing_compare_hist.png" alt="DIMM vs SALT guider histograms">
-            <figcaption>Normalized distributions of DIMM seeing
-            (n&nbsp;=&nbsp;33,091) and SALT guider image FWHM (n&nbsp;=&nbsp;382,526),
-            both in arcsec, over the Jan&ndash;Apr&nbsp;2026 overlap.</figcaption>
+            <figcaption>
+              Normalized distributions of DIMM seeing
+              (n&nbsp;=&nbsp;33,091) and SALT guider image FWHM (n&nbsp;=&nbsp;382,526),
+              both in arcsec, over the Jan&ndash;Apr&nbsp;2026 overlap. SALT guider data includes
+              both RSS and HRS.
+            </figcaption>
           </figure>
           <figure>
             <img src="assets/figures/seeing_compare_nights.png" alt="Four representative nights">
-            <figcaption>Four representative nights: timDIMM seeing and SALT guider
-            FWHM vs time. <span class="todo">[TODO: agreement/offset commentary]</span></figcaption>
+            <figcaption>
+              Four representative nights: DIMM seeing and SALT guider FWHM vs time.
+            </figcaption>
           </figure>
         </section>
       </section>
@@ -163,8 +216,10 @@
     <footer id="footer">
       <div class="foot-grid">
         <div>
-          <b>Acknowledgments:</b> South African Astronomical Observatory (SAAO) &amp;
-          Southern African Large Telescope (SALT). timDIMM upgrade by the authors.
+          <b>Acknowledgments:</b> Many, many thanks are owed to the staffs of the South African Astronomical
+          Observatory (SAAO) &amp; Southern African Large Telescope (SALT) who have supported and maintained this
+          system over many years. The authors also acknowledge the support of the National Research Foundation
+          (NRF) of South Africa.
         </div>
         <img class="spie-logo" src="assets/logos/spie.jpg" alt="SPIE">
         <div class="foot-right">
