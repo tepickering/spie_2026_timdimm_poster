@@ -21,8 +21,8 @@ cp "$PYPEIT/assets/logos/spie.jpg" "$LOGO/spie.jpg"
 
 # --- photos ---
 cp "$ROOT/timdimm_closeup.jpeg"          "$FIG/timdimm_closeup.jpeg"
-cp "$ROOT/timdimm_night.jpeg"            "$FIG/timdimm_night.jpeg"
-cp "$ROOT/timdimm_evening_oldmount.jpg"  "$FIG/timdimm_oldmount.jpg"
+cp "$ROOT/timdimm_open_daytime.jpeg"     "$FIG/timdimm_open_daytime.jpeg"
+cp "$ROOT/tim_and_nico.jpg"              "$FIG/tim_and_nico.jpg"
 cp "$ROOT/ants_nuc.jpeg"                 "$FIG/ants_nuc.jpeg"
 cp "$ROOT/ants_motherboard.jpeg"         "$FIG/ants_motherboard.jpeg"
 
