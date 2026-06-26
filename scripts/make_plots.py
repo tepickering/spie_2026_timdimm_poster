@@ -65,11 +65,15 @@ def load_salt():
 
 def fig_compare_hist(dimm, salt):
     bins = np.arange(SEEING_MIN, SEEING_MAX + 0.1, 0.1)
+    med_d = dimm["seeing"].median()
+    med_s = salt["fwhm"].median()
     fig, ax = plt.subplots(figsize=(9.5, 6.2))
     ax.hist(dimm["seeing"], bins=bins, density=True, color=BLUE, alpha=0.55,
-            label=f"DIMM (n={len(dimm)})")
+            label=f"DIMM (n={len(dimm)}, median {med_d:.2f}″)")
     ax.hist(salt["fwhm"], bins=bins, density=True, histtype="step", lw=2.6,
-            color=RED, label=f"SALT guider (n={len(salt)})")
+            color=RED, label=f"SALT guider (n={len(salt)}, median {med_s:.2f}″)")
+    ax.axvline(med_d, color=NAVY, ls="--", lw=2.2)
+    ax.axvline(med_s, color=RED, ls="--", lw=2.2)
     ax.set_xlabel("seeing / image FWHM (arcsec)")
     ax.set_ylabel("normalized frequency")
     ax.set_title("DIMM vs SALT guider (Jan–Apr 2026)")
@@ -79,7 +83,7 @@ def fig_compare_hist(dimm, salt):
     fig.tight_layout()
     out = os.path.join(FIG, "seeing_compare_hist.png")
     fig.savefig(out, dpi=200); plt.close(fig)
-    print("wrote", out)
+    print("wrote", out, f"| DIMM median={med_d:.2f} SALT median={med_s:.2f}")
 
 
 def _nightly(df):
