@@ -129,7 +129,9 @@ def fig_compare_nights(dimm, salt):
                     key=lambda n: min(cd[n], cs[n]), reverse=True)
     nights = sorted(common[:4])
     assert len(nights) == 4, f"need 4 well-sampled common nights, found {len(common)}"
-    fig, axes = plt.subplots(2, 2, figsize=(13.5, 9.0), sharey=True)
+    # near-square figure -> each panel close to 1:1, which stretches the 0-5"
+    # y-axis and accentuates the DIMM-vs-guider differences
+    fig, axes = plt.subplots(2, 2, figsize=(13.5, 13.0), sharey=True)
     for ax, night in zip(axes.ravel(), nights):
         dn = d[d["night"] == night]; sn = s[s["night"] == night]
         ax.plot(dn["time"].dt.tz_convert(None), dn["seeing"], ".", ms=5,
@@ -138,7 +140,7 @@ def fig_compare_nights(dimm, salt):
                 color=RED, alpha=0.6, label="SALT guider")
         ax.set_title(str(night)); ax.set_ylim(0, 5)
         # fixed evening-to-morning window, 18:00–04:30 UT
-        ax.set_xlim(pd.Timestamp(night) + pd.Timedelta(hours=18),
+        ax.set_xlim(pd.Timestamp(night) + pd.Timedelta(hours=17.25),
                     pd.Timestamp(night) + pd.Timedelta(days=1, hours=4.5))
         ax.grid(color=HAIR)
         ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
