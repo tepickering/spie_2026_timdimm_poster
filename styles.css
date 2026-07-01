@@ -44,6 +44,15 @@ body{background:var(--bg);color:var(--ink);
    it from the section before, minimal space below so it reads with the plot */
 #col3 .subhead + figure{margin-top:0;}
 
+/* compact references block squeezed into the bottom of column 3;
+   entries match the footer text size */
+.references{margin-top:-16mm;font-size:19pt;color:var(--muted);line-height:1.32;}
+.references h3{font-family:"Space Grotesk",sans-serif;font-size:24pt;font-weight:700;
+  color:var(--ink);margin-bottom:4mm;}
+.references ol{margin:0;padding-left:1.3em;}
+.references li{margin-bottom:2mm;}
+.references a{color:inherit;word-break:break-all;}
+
 /* typography */
 h1,h2,h3{font-family:"Space Grotesk",sans-serif;line-height:1.08;}
 .section{break-inside:avoid;}
